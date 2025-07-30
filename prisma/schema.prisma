@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  points    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // User progress and sessions
+  sessions    Session[]
+  submissions  Submission[]
+  aiRequests   AIRequest[]
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  displayName String
+  description String
+  level       Int      // 1, 2, 3, etc.
+  topics      String   // JSON array of topics
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  problems Problem[]
+}
+
+model Problem {
+  id          String   @id @default(cuid())
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id])
+  title       String
+  content     String   // The problem text
+  solution    String   // The correct answer/explanation
+  difficulty  String   // "easy", "medium", "hard"
+  topics      String   // JSON array of topics
+  source      String?  // Where the problem came from (e.g., "AMC 8", "Final Exam")
+  year        Int?     // Year of the exam
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  submissions Submission[]
+  aiRequests  AIRequest[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  courseId  String?
+  startTime DateTime @default(now())
+  endTime   DateTime?
+  score     Int?
+  problemsAttempted Int @default(0)
+  problemsCorrect   Int @default(0)
+}
+
+model Submission {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  problemId  String
+  problem    Problem  @relation(fields: [problemId], references: [id])
+  answer     String
+  isCorrect  Boolean
+  timeSpent  Int      // in seconds
+  createdAt  DateTime @default(now())
+}
+
+model AIRequest {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  problemId String?
+  problem   Problem? @relation(fields: [problemId], references: [id])
+  question  String   // What the user asked the AI
+  response  String   // AI's response
+  createdAt DateTime @default(now())
+} 
