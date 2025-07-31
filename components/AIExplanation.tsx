@@ -16,14 +16,16 @@ import { Problem, AIExplanationResponse } from '@/types'
 
 interface AIExplanationProps {
   problem: Problem
+  userAnswer?: string
+  isCorrect?: boolean | null
   onClose: () => void
 }
 
-export default function AIExplanation({ problem, onClose }: AIExplanationProps) {
+export default function AIExplanation({ problem, userAnswer: propUserAnswer, isCorrect, onClose }: AIExplanationProps) {
   const [question, setQuestion] = useState('')
   const [explanation, setExplanation] = useState<AIExplanationResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [userAnswer, setUserAnswer] = useState('')
+  const [userAnswer, setUserAnswer] = useState(propUserAnswer || '')
 
   const handleAskQuestion = async () => {
     if (!question.trim()) return
@@ -36,7 +38,7 @@ export default function AIExplanation({ problem, onClose }: AIExplanationProps) 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          problemId: problem.id,
+          problemId: problem.title,
           question: question,
           userAnswer: userAnswer || undefined,
         }),
