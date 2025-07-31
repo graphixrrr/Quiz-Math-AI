@@ -1043,7 +1043,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 overflow-hidden">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1164,7 +1164,7 @@ export default function Home() {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col overflow-hidden">
           {currentPage === 'points' ? (
             <PointsPage onBack={() => setCurrentPage('dashboard')} />
           ) : currentPage === 'contact' ? (
@@ -1175,24 +1175,24 @@ export default function Home() {
             <AssessmentPage onBack={() => setCurrentPage('dashboard')} />
           ) : (
             // Main Dashboard Content
-            <div className="flex-1 p-8">
+            <div className="flex-1 p-8 overflow-y-auto">
               {gameState === 'course-selection' && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="max-w-4xl mx-auto"
+                  className="max-w-6xl mx-auto"
                 >
-                  <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  <div className="text-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-3">
                       Choose Your Math Course
                     </h2>
-                    <p className="text-lg text-gray-600">
+                    <p className="text-gray-600">
                       Select a course to start practicing with AI-powered explanations
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {courses.map((course, index) => (
                       <motion.div
                         key={course.id}
@@ -1200,36 +1200,34 @@ export default function Home() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         onClick={() => handleCourseSelect(course)}
-                        className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-200 hover:border-primary-300"
+                        className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-200 hover:border-primary-300 p-5"
                       >
-                        <div className="p-6">
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-                              <BookOpen className="h-6 w-6 text-primary-600" />
-                            </div>
-                            <span className="text-sm text-gray-500">
-                              {sampleProblems[course.id]?.length || 0} problems
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                            <BookOpen className="h-5 w-5 text-primary-600" />
+                          </div>
+                          <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                            {sampleProblems[course.id]?.length || 0} problems
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          {course.displayName}
+                        </h3>
+                        <p className="text-gray-600 mb-3 text-sm">
+                          {course.description}
+                        </p>
+                        <div className="flex flex-wrap gap-1">
+                          {course.topics.slice(0, 2).map((topic, idx) => (
+                            <span
+                              key={idx}
+                              className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
+                            >
+                              {topic}
                             </span>
-                          </div>
-                          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                            {course.displayName}
-                          </h3>
-                          <p className="text-gray-600 mb-4">
-                            {course.description}
-                          </p>
-                          <div className="flex flex-wrap gap-1">
-                            {course.topics.slice(0, 3).map((topic, idx) => (
-                              <span
-                                key={idx}
-                                className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
-                              >
-                                {topic}
-                              </span>
-                            ))}
-                            {course.topics.length > 3 && (
-                              <span className="text-xs text-gray-500">+{course.topics.length - 3} more</span>
-                            )}
-                          </div>
+                          ))}
+                          {course.topics.length > 2 && (
+                            <span className="text-xs text-gray-500">+{course.topics.length - 2} more</span>
+                          )}
                         </div>
                       </motion.div>
                     ))}
@@ -1242,51 +1240,52 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="max-w-2xl mx-auto"
+                  className="max-w-4xl mx-auto"
                 >
-                  <div className="text-center mb-8">
+                  <div className="text-center mb-6">
                     <button
                       onClick={handleBackToCourses}
-                      className="text-primary-600 hover:text-primary-700 mb-4 flex items-center space-x-2 mx-auto"
+                      className="text-primary-600 hover:text-primary-700 mb-3 flex items-center space-x-2 mx-auto"
                     >
                       <ArrowRight className="h-4 w-4 rotate-180" />
                       <span>Back to Courses</span>
                     </button>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
                       Choose Difficulty Level
                     </h2>
-                    <p className="text-lg text-gray-600">
+                    <p className="text-gray-600">
                       {selectedCourse.displayName} - Select your challenge level
                     </p>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {(['easy', 'medium', 'hard'] as const).map((difficulty) => {
                       const problemCount = sampleProblems[selectedCourse.id]?.filter(p => p.difficulty === difficulty).length || 0
                       return (
                         <motion.button
                           key={difficulty}
                           onClick={() => handleDifficultySelect(difficulty)}
-                          className="w-full bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-primary-300 p-6 text-left"
+                          className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-primary-300 p-5 text-left h-32 flex flex-col justify-between"
                         >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-4">
-                              <div className="text-2xl">{getDifficultyIcon(difficulty)}</div>
-                              <div>
-                                <h3 className="text-xl font-semibold text-gray-900 capitalize">
-                                  {difficulty} Level
-                                </h3>
-                                <p className="text-gray-600">
-                                  {difficulty === 'easy' ? 'Basic concepts and straightforward problems' :
-                                   difficulty === 'medium' ? 'Intermediate problems with some complexity' :
-                                   'Advanced problems requiring deep understanding'}
-                                </p>
-                              </div>
+                          <div className="flex items-center space-x-3 mb-3">
+                            <div className="text-2xl">{getDifficultyIcon(difficulty)}</div>
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-900 capitalize">
+                                {difficulty} Level
+                              </h3>
+                              <p className="text-sm text-gray-600">
+                                {difficulty === 'easy' ? 'Basic concepts' :
+                                 difficulty === 'medium' ? 'Intermediate problems' :
+                                 'Advanced problems'}
+                              </p>
                             </div>
-                            <div className="text-right">
-                              <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(difficulty)}`}>
-                                {problemCount} problems
-                              </div>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(difficulty)}`}>
+                              {problemCount} problems
+                            </div>
+                            <div className="text-primary-600">
+                              <ArrowRight className="h-4 w-4" />
                             </div>
                           </div>
                         </motion.button>
@@ -1301,57 +1300,65 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="max-w-4xl mx-auto"
+                  className="max-w-6xl mx-auto"
                 >
-                  <div className="text-center mb-8">
+                  <div className="text-center mb-6">
                     <button
                       onClick={handleBackToDifficulty}
-                      className="text-primary-600 hover:text-primary-700 mb-4 flex items-center space-x-2 mx-auto"
+                      className="text-primary-600 hover:text-primary-700 mb-3 flex items-center space-x-2 mx-auto"
                     >
                       <ArrowRight className="h-4 w-4 rotate-180" />
                       <span>Back to Difficulty</span>
                     </button>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
                       Choose a Problem
                     </h2>
-                    <p className="text-lg text-gray-600">
+                    <p className="text-gray-600">
                       {selectedCourse.displayName} - {selectedDifficulty.charAt(0).toUpperCase() + selectedDifficulty.slice(1)} Level
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {getFilteredProblems().map((problem, index) => (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[70vh] overflow-y-auto">
+                    {getFilteredProblems().slice(0, 12).map((problem, index) => (
                       <motion.div
                         key={problem.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        transition={{ duration: 0.5, delay: index * 0.05 }}
                         onClick={() => handleProblemSelect(problem)}
-                        className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-200 hover:border-primary-300 p-6"
+                        className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-200 hover:border-primary-300 p-4 h-48 flex flex-col"
                       >
-                        <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-lg font-semibold text-gray-900">
+                        <div className="flex items-center justify-between mb-3">
+                          <h3 className="text-sm font-semibold text-gray-900 line-clamp-1">
                             {problem.title}
                           </h3>
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(problem.difficulty)}`}>
                             {problem.difficulty}
                           </span>
                         </div>
-                        <p className="text-gray-600 mb-4 line-clamp-3">
+                        <p className="text-gray-600 mb-4 text-sm line-clamp-4 flex-1">
                           {problem.content}
                         </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-500">
+                        <div className="flex items-center justify-between mt-auto">
+                          <span className="text-xs text-gray-500">
                             {problem.source}
                           </span>
-                          <button className="flex items-center space-x-2 text-primary-600 hover:text-primary-700">
-                            <Play className="h-4 w-4" />
-                            <span>Start</span>
+                          <button className="flex items-center space-x-1 text-primary-600 hover:text-primary-700 bg-primary-50 px-3 py-1 rounded-md">
+                            <Play className="h-3 w-3" />
+                            <span className="text-sm">Start</span>
                           </button>
                         </div>
                       </motion.div>
                     ))}
                   </div>
+                  
+                  {getFilteredProblems().length > 12 && (
+                    <div className="text-center mt-6">
+                      <p className="text-gray-500 text-sm">
+                        Showing 12 of {getFilteredProblems().length} problems
+                      </p>
+                    </div>
+                  )}
                 </motion.div>
               )}
 
